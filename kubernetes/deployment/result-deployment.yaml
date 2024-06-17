@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: result-deployment
+spec:
+  selector:
+    matchLabels:
+      app: voting-app-result
+  template:
+    metadata:
+      labels:
+        app: voting-app-result
+    spec:
+      containers:
+      - name: voting-app-result
+        image: omprakashsirvibose/votingapp-result:1
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 80
+          periodSeconds: 10
+          initialDelaySeconds: 10
+        env:
+          - name: DB_HOST
+            value: db-service.default
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
